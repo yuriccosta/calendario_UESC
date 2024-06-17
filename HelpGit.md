@@ -70,3 +70,21 @@ git push origin main
 ```
 
 Lembre-se de substituir `main` pelo nome da branch para a qual você deseja subir suas alterações.
+
+## Pull Request
+
+### Para quem estiver na develop
+
+- Quando achar que está pronto para mandar para a test, vá no github nesse repositório e entre na aba Pull requests
+- Selecione New pull request
+- No primeiro slot selecione a branch `test` e no segundo selecione a branch `develop`
+- Selecione Create pull request
+- Dê um título e uma descrição, confirme o PR e avise que o fez
+
+### Para quem estiver na test
+
+- Quando achar que está pronto para mandar para a principal, vá no github nesse repositório e entre na aba Pull requests
+- Selecione New pull request
+- No primeiro slot selecione a branch `main` e no segundo selecione a branch `test`
+- Selecione Create pull request
+- Dê um título e uma descrição, confirme o PR e avise que o fez
