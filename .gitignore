@@ -1,0 +1,11 @@
+# Ignorando algumas pastas
+.vscode/
+.venv/
+.idea/
+__pycache__/
+
+# Ignorando arquivos de teste simples
+*.tst.py
+
+# Ignorando alguns arquivos
+
