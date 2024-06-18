@@ -83,8 +83,18 @@ Lembre-se de substituir `main` pelo nome da branch para a qual você deseja subi
 
 ### Para quem estiver na test
 
-- Quando achar que está pronto para mandar para a principal, vá no github nesse repositório e entre na aba Pull requests
+Se o código enviado pela develop estiver correto
+
+- Vá no github nesse repositório e entre na aba Pull requests
 - Selecione New pull request
 - No primeiro slot selecione a branch `main` e no segundo selecione a branch `test`
+- Selecione Create pull request
+- Dê um título e uma descrição, confirme o PR e avise que o fez
+
+Se o código tiver erros ou ainda não estiver pronto para ir para main
+
+- Vá no github nesse repositório e entre na aba Pull requests
+- Selecione New pull request
+- No primeiro slot selecione a branch `develop` e no segundo selecione a branch `test`
 - Selecione Create pull request
 - Dê um título e uma descrição, confirme o PR e avise que o fez
