@@ -1,8 +1,8 @@
 from datetime import datetime
-from calendar import Calendar
+from calendar import TextCalendar
 #from dateutil.relativedelta import relativedelta
 
-class calendario_UESC:
+class calendarioEventos(TextCalendar):
     def __init__(self):
         # Data atual, util para pegar o dia, mês e ano assim que inicializar o programa 
         # e quando precisar voltar para o dia atual
@@ -17,13 +17,11 @@ class calendario_UESC:
         self.__ano: int = self.__dataAtual.year
         self.__diaSemana: int = self.__dataAtual.weekday()
 
-        # Atributos referentes ao calendário
-        self.__cal: Calendar = Calendar()
-        self.__listaMes: list[list[tuple[int, int]]]= self.__cal.monthdays2calendar(self.__ano, self.__mes)
-        self.__listaAno: list[list[tuple[int, int]]] = self.__cal.yeardays2calendar(self.__ano, 12)
-
-        # Lista de eventos cadastrados
-        self.__eventosAno: dict[int, dict[int, dict[int, list[(datetime, str)]]]] = {}
+        # Tenta carregar os eventos cadastrados, se não encontrar o arquivo, cria um dicionário vazio
+        try:
+            self.__carregarEventos()
+        except FileNotFoundError:
+            self.__eventosAno: dict[int, dict[int, dict[int, list[tuple[str, str]]]]] = {}
 
     '''
         self.exemplo_do_evento = {
@@ -46,18 +44,6 @@ class calendario_UESC:
         }
     '''
 
-    # Método que retorna os eventos do ano, caso não tenha eventos, retorna um dicionário vazio
-    def listaEventosAno(self, ano: int) -> dict[int, dict[int, list[tuple[datetime, str]]]]:
-        return self.__eventosAno.get(ano, {})
-
-    # Método que retorna os eventos do mês, caso não tenha eventos, retorna um dicionário vazio
-    def listaEventosMes(self, mes: int, ano: int) -> dict[int, list[tuple[datetime, str]]]: 
-        return self.listaEventosAno(ano).get(mes, {})
-
-    # Método que retorna os eventos do dia, caso não tenha eventos, retorna uma lista None
-    def listaEventosDia(self, dia: int, mes: int, ano: int) -> list[tuple[datetime, str]]:
-        return self.listaEventosMes(mes, ano).get(dia, None)
-
 
     # Método auxiliar para adicionar um evento no atributo __eventosAno
     def __adicionaEvento(self, dia: int, mes: int, ano: int, evento: tuple[datetime, str]) -> None:
@@ -75,11 +61,11 @@ class calendario_UESC:
     # Método para cadastrar um evento, retorna True se foi possível cadastrar o evento e False caso contrário
     def cadastraEvento(self, dia: int, mes: int, ano: int, descricao: str = '', hora=0, minuto=0) -> bool:
         self.__dataAtual = datetime.now()
-        evento = datetime(ano, mes, dia, hora, minuto)
-        evento = (evento, descricao)
+        data = datetime(ano, mes, dia, hora, minuto)
+        evento = (data.isoformat(), descricao)
 
         # Verifica se a data do evento é maior que a data atual
-        if self.__dataAtual < evento[0]:
+        if self.__dataAtual < data:
             self.__adicionaEvento(dia, mes, ano, evento)
             return True
         
@@ -95,8 +81,6 @@ class calendario_UESC:
             self.__ano -= 1
         self.__dataAux = datetime(self.__ano, self.__mes, self.__dia)
         self.__diaSemana = self.__dataAux.weekday()
-        self.__listaMes = self.__cal.monthdays2calendar(self.__ano, self.__mes)
-        self.__listaAno = self.__cal.yeardays2calendar(self.__ano, 12)
         
 
     # Método para avançar o mês, a partir de self.__mes
@@ -108,8 +92,6 @@ class calendario_UESC:
             self.__ano += 1
         self.__dataAux = datetime(self.__ano, self.__mes, self.__dia)
         self.__diaSemana = self.__dataAux.weekday()
-        self.__listaMes = self.__cal.monthdays2calendar(self.__ano, self.__mes)
-        self.__listaAno = self.__cal.yeardays2calendar(self.__ano, 12)
 
 
     # Método para voltar o ano, a partir de self.__ano
@@ -119,8 +101,6 @@ class calendario_UESC:
         self.__mes = 1
         self.__dataAux = datetime(self.__ano, self.__mes, self.__dia)
         self.__diaSemana = self.__dataAux.weekday()
-        self.__listaMes = self.__cal.monthdays2calendar(self.__ano, self.__mes)
-        self.__listaAno = self.__cal.yeardays2calendar(self.__ano, 12)
 
 
     # Método para avançar o ano, a partir de self.__ano
@@ -130,8 +110,6 @@ class calendario_UESC:
         self.__mes = 1
         self.__dataAux = datetime(self.__ano, self.__mes, self.__dia)
         self.__diaSemana = self.__dataAux.weekday()
-        self.__listaMes = self.__cal.monthdays2calendar(self.__ano, self.__mes)
-        self.__listaAno = self.__cal.yeardays2calendar(self.__ano, 12)
 
 
     ''' # Método utilizando o relativedelta para voltar o mês
@@ -146,24 +124,46 @@ class calendario_UESC:
 '''
 
 
+    # Método para salvar os eventos em um arquivo
+    def salvarEventos(self) -> None:
+        with open("eventosAno.txt", 'w') as f:
+            f.write((str(self.__eventosAno)))
+
+    def __carregarEventos(self) -> None:
+        with open("eventosAno.txt", 'r') as f:
+            self.__eventosAno = eval(f.read())
+
     # Métodos getters
-    def getDia(self):
+    def getDia(self) -> int:
         return self.__dia
     
-    def getMes(self):
+    def getMes(self) -> int:
         return self.__mes
     
-    def getAno(self):
+    def getAno(self) -> int:
         return self.__ano
     
-    def getDiaSemana(self):
+    def getDiaSemana(self) -> int:
         return self.__diaSemana
     
-    def getListaMes(self):
+    def getListaMes(self) -> list[list[tuple[int, int]]]:
         return self.__listaMes
     
-    def getListaAno(self):
+    def getListaAno(self) -> list[list[tuple[int, int]]]:
         return self.__listaAno
     
-    def getEventos(self):
+    # Método que retorna os eventos do dia, caso não tenha eventos, retorna uma lista None
+    def getEventosDia(self, dia: int, mes: int, ano: int) -> list[tuple[datetime, str]]:
+        return self.getEventosMes(mes, ano).get(dia, None)
+
+    # Método que retorna os eventos do mês, caso não tenha eventos, retorna um dicionário vazio
+    def getEventosMes(self, mes: int, ano: int) -> dict[int, list[tuple[str, str]]]: 
+        return self.getEventosAno(ano).get(mes, {})
+    
+    # Método que retorna os eventos do ano, caso não tenha eventos, retorna um dicionário vazio
+    def getEventosAno(self, ano: int) -> dict[int, dict[int, list[tuple[str, str]]]]:
+        return self.__eventosAno.get(ano, {})
+    
+    # Método que retorna todos os eventos cadastrados
+    def getEventos(self) -> dict[int, dict[int, dict[int, list[tuple[str, str]]]]]:
         return self.__eventosAno
