@@ -3,16 +3,17 @@ from collections import defaultdict
 
 class Eventos:
 
-    def __init__(self) -> None:
+    def __init__(self):
         self.__eventos = defaultdict(set)
         self.__carregar_eventos()
 
+
     @property
-    def eventos(self):
+    def eventos(self) -> defaultdict:
         return self.__eventos
     
 
-    def eventos_por_mes(self, mes: int, ano: int = 2024):
+    def eventos_por_mes(self, mes: int, ano: int = 2024) -> list[list]:
         """
         O método retorna todos os eventos referentes a determinado mês/ano.
         Por padrão se apenas passar o mês, vai entender que está se referindo ao mês de 2024.
@@ -28,11 +29,12 @@ class Eventos:
                 data = f'{lista_eventos_mes[i][0]}/{lista_eventos_mes[i][1]}/{lista_eventos_mes[i][2]}'
                 for evento in self.__eventos[data]:
                     lista.append([data, evento])
+        lista.sort(key = lambda x: x[0])
 
         return lista
 
 
-    def criar_evento(self, data: str, evento: str):
+    def criar_evento(self, data: str, evento: str) -> str:
         """
         Cria um novo evento e retorna uma string para ser usado no front.
         """
@@ -41,10 +43,10 @@ class Eventos:
             self.__salvar_eventos()
             return 'Evento registrado com sucesso!'
         else:
-            return 'Data invalida! Digite uma data atual ou futura!'
+            return 'Data invalida! Digite a data atual ou futura!'
 
 
-    def __verifica_data(self, data_str: str):
+    def __verifica_data(self, data_str: str) -> bool:
         """
         Verifica se a data é do dia ou futura, caso contrário retorna Falso.
         """
