@@ -10,6 +10,26 @@ class Eventos:
     @property
     def eventos(self):
         return self.__eventos
+    
+
+    def eventos_por_mes(self, mes: int, ano: int = 2024):
+        """
+        O método retorna todos os eventos referentes a determinado mês/ano.
+        Por padrão se apenas passar o mês, vai entender que está se referindo ao mês de 2024.
+        """
+        lista_eventos_mes = []
+        for data in self.__eventos:
+            aux = data.split('/')
+            lista_eventos_mes.append(aux)
+
+        lista = []
+        for i, aux in enumerate(lista_eventos_mes):
+            if int(aux[1]) == mes and int(aux[2]) == ano:
+                data = f'{lista_eventos_mes[i][0]}/{lista_eventos_mes[i][1]}/{lista_eventos_mes[i][2]}'
+                for evento in self.__eventos[data]:
+                    lista.append([data, evento])
+
+        return lista
 
 
     def criar_evento(self, data: str, evento: str):
