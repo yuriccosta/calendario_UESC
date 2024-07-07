@@ -1,9 +1,18 @@
 from calendario import Calendario
+import holidays
 
 def main():
+
+    """
+    feriados = holidays.country_holidays('BR')
+    for feriado in feriados["2024-01-01":"2024-12-31"]:
+        nome_feriado = holidays.country_holidays('BR').get(feriado)
+        print(feriado, nome_feriado)
+    """
+
     calendario = Calendario()
 
-    log = calendario.criar_evento('15/09/2024', 'Aniversario Beltrano')
+    log = calendario.criar_evento('15/09/2024', '15/09/2024', 'Aniversario Teste')
     eventos = calendario.eventos_por_mes(9)
     print(eventos)
 
