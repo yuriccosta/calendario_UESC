@@ -433,8 +433,8 @@ def atualizarEventos(ano, mes):
 eventos = {2024:{
                 'Julho': [[[1], False, 'Nada'], 
                         [[2,6], False, 'Nada de novo']],
-                'Agosto':[[[25], True, 'Greve'], 
-                        [[31], False, 'Fim da Greve']],
+                'Agosto':[[[25], True, 'Outro Nada'], 
+                        [[31], False, 'Acertou, Nada']],
                 'Dezembro':[[[25], True, 'Natal'], 
                             [[31], True, 'Ano Novo']]
                 },
