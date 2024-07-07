@@ -12,7 +12,7 @@ def main():
 
     calendario = Calendario()
 
-    log = calendario.criar_evento('15/09/2024', '15/09/2024', 'Aniversario Teste')
+    log = calendario.criar_evento('17/09/2024', '17/09/2024', 'Aniversario Teste Teste Teste')
     eventos = calendario.eventos_por_mes(9)
     print(eventos)
 

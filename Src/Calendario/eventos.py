@@ -20,15 +20,11 @@ class Eventos:
         O método retorna todos os eventos referentes a determinado mês/ano.
         Por padrão se apenas passar o mês, vai entender que está se referindo ao mês de 2024.
         """
-        lista_eventos_mes = []
-        for data in self.__eventos:
-            aux = data.split('/')
-            lista_eventos_mes.append(aux)
-
+        lista_eventos = self.__lista_datas_eventos()
         lista = []
-        for i, aux in enumerate(lista_eventos_mes):
+        for i, aux in enumerate(lista_eventos):
             if int(aux[1]) == mes and int(aux[2]) == ano:
-                data = f'{lista_eventos_mes[i][0]}/{lista_eventos_mes[i][1]}/{lista_eventos_mes[i][2]}'
+                data = f'{lista_eventos[i][0]}/{lista_eventos[i][1]}/{lista_eventos[i][2]}'
                 for evento in self.__eventos[data]:
                     descricao_evento, dias = evento.split('-')
                     descricao_evento = descricao_evento[0:-1]
@@ -37,12 +33,23 @@ class Eventos:
         lista.sort(key = lambda x: x[0])
 
         return lista
+    
+    def __lista_datas_eventos(self) -> list[list]:
+        lista_eventos = []
+        for data in self.__eventos:
+            aux = data.split('/')
+            lista_eventos.append(aux)
+        
+        lista_eventos.sort(key = lambda eventos: (eventos[2], eventos[1], eventos[0]))
+        return lista_eventos
+
 
     def __calcula_tempo_evento(self, data_inicial: str, dias: int) -> str:
         data = datetime.strptime(data_inicial, Eventos.formatacao_data).date()
         ano, mes, dia = str(data + timedelta(dias)).split('-')
         data_final = f'{dia}/{mes}/{ano}'
         return data_final
+
 
     def criar_evento(self, data_inicial: str, data_final: str, evento: str) -> str:
         """
