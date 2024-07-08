@@ -96,12 +96,6 @@ class ListaEventos:
 
             nao_funciona_evento = 1 if nao_funciona else 0
 
-            # Verifica se o evento ja esta cadastrado com maiscula ou nao
-            aux = f'{nao_funciona} - {evento} - {dias.days}'.lower()
-            for auxevento in self.__eventos[data_inicial]:
-                if aux == auxevento.lower():
-                    return 'Evento já registrado'
-
             self.__eventos[data_inicial].add(f'{nao_funciona_evento} - {evento} - {dias.days}')
             self.__salvar_eventos()
             return 'Evento registrado com sucesso!'
@@ -141,7 +135,7 @@ class ListaEventos:
         """
         Método auxiliar ao método cria_eventos, apenas salva um novo evento no arquivo txt.
         """
-        with open('resources/eventos.txt', 'w') as file:
+        with open('resources/eventos.txt', 'w+') as file:
             for data, eventos in self.__eventos.items():
                 for evento in eventos:
                     file.write(f'{data} - {evento}\n')
