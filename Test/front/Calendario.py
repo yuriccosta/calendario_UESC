@@ -5,14 +5,37 @@ from formatacao import *
 import calendar
 
 WIDTH = 100
-FONT = ('Calibri', 13)
+FONT = ('Calibri', 12)
 BUTTONFONT = ('Calibri', 12)
-SFONT = ('Calibri', 13)
-BFONT = ('Calibri', 13, 'bold')
+SFONT = ('Calibri', 12)
+BFONT = ('Calibri', 12, 'bold')
 BACKGROUND = '#d1d1d1'
 FOREGROUND = '#1b1d24'
 
+def estilizar():
+    ttk.Style(root).theme_use('alt')
+    ttk.Style(root).configure('TButton', background=BACKGROUND, foreground = FOREGROUND, font=BUTTONFONT, borderwidth=0, focusthickness=0, focuscolor='none', width = 20)
+    ttk.Style(root).map('TButton', background=[('active',BACKGROUND)])
+    ttk.Style(root).configure('TMenubutton', font=FONT, border=0, borderwidth=0, borderradius=10, width=9, radius=50, anchor='center')
+    ttk.Style(root).configure('TCheckbutton', font=FONT, borderwidth=0, focusthickness=0, focuscolor='none')
+    ttk.Style(root).map('TCheckbutton', background=[('hover', BACKGROUND)])
+    ttk.Style(root).configure('TFrame', background=BACKGROUND)
+
+
 meses_por_indice = {
+    'Janeiro': 1,
+    'Fevereiro': 2,
+    'Março': 3,
+    'Abril': 4,
+    'Maio': 5,
+    'Junho': 6,
+    'Julho': 7,
+    'Agosto': 8,
+    'Setembro': 9,
+    'Outubro': 10,
+    'Novembro': 11,
+    'Dezembro': 12,
+
     1: 'Janeiro',
     2: 'Fevereiro',
     3: 'Março',
@@ -27,21 +50,6 @@ meses_por_indice = {
     12: 'Dezembro'
 }
 
-quantidade_de_dias = {
-    1: 31,
-    2: 28,
-    3: 31,
-    4: 30,
-    5: 31,
-    6: 30,
-    7: 31,
-    8: 31,
-    9: 30,
-    10: 31,
-    11: 30,
-    12: 31
-}
-
 def adicionar_evento():
     dia_atual = date.today().day
     mes_atual = date.today().month
@@ -50,6 +58,7 @@ def adicionar_evento():
     anos_possiveis = [ano_atual + i for i in range(0, 11)]
 
     Adicionar_Evento = Toplevel()
+    Adicionar_Evento.configure(background=BACKGROUND)
 
     ano = StringVar()
     mes = StringVar()
@@ -62,9 +71,6 @@ def adicionar_evento():
     container_dia = ttk.Frame(Adicionar_Evento)
     container_evento = ttk.Frame(Adicionar_Evento)
     
-    estilo_menu = ttk.Style(Adicionar_Evento)
-    estilo_menu.configure('TMenubutton', font=FONT, border=0, borderwidth=0, borderradius=10, width=9, radius=50, anchor='center')
-
     menu_meses = ttk.OptionMenu(container_mes, mes, '')
     menu_dias = ttk.OptionMenu(container_dia, dia_inicial, '')
     menu_dia_final = ttk.OptionMenu(container_dia, dia_final, '')
@@ -79,6 +85,7 @@ def adicionar_evento():
         container_evento = ttk.Frame(Adicionar_Evento)
         mini_container = ttk.Frame(container_evento)
         info = ttk.Entry(container_evento, font=FONT, width=50)
+
         desc_request = ttk.Label(mini_container, font=FONT, text=f'Digite a descrição do evento: ', width=50, anchor='w')
         funciona_marcar = ttk.Checkbutton(mini_container, text='Não funciona', variable=funciona)
         send_info = ttk.Button(container_evento, text='Enviar e Continuar', command=send_data)
@@ -122,23 +129,22 @@ def adicionar_evento():
         adicionar_ao_dicionario()
         Adicionar_Evento.destroy()
         Adicionar_Evento.update()
-        atualizarEventos(ano_calendario, mes_calendario)
+        if int(ano.get()) == ano_calendario and meses_por_indice[mes.get()] == mes_calendario:
+            atualizarEventos(ano_calendario, mes_calendario)
 
     def send_data():
         global info
         adicionar_ao_dicionario()
-        atualizarEventos(ano_calendario, mes_calendario)
+        if int(ano.get()) == ano_calendario and meses_por_indice[mes.get()] == mes_calendario:
+            atualizarEventos(ano_calendario, mes_calendario)
         entry()
 
     def diaFinal(dia_inicial: StringVar):
 
-        month = mes.get()
+        month =meses_por_indice[mes.get()]
         year = int(ano.get())
-        for i in range(1, 13):
-            if month == meses_por_indice[i]:
-                month = i
-                break
-        dias_possiveis = [i for i in range(dia_inicial, quantidade_de_dias[month] + (year % 4 == 0 if month == 2 else 0) + 1)]
+        month == meses_por_indice[month]
+        dias_possiveis = [i for i in range(dia_inicial, calendar.monthrange(year, month)[1] + 1)]
 
         nonlocal menu_dia_final
         nonlocal dia_final
@@ -153,20 +159,18 @@ def adicionar_evento():
 
         divisor.pack(side='left')
         menu_dia_final.pack(side='left')
-        container_dia.pack(side='left', padx=2)
+        container_dia.pack(side='left')
 
         entry()
 
     def mostrarMenuDias(mes: StringVar):
         year = int(ano.get())
-        for i in range(1, 13):
-            if mes == meses_por_indice[i]:
-                month = i
-                break
+        month = meses_por_indice[mes]
+
         if month > mes_atual or (month <= mes_atual and year > ano_atual):
-            dias_possiveis = [i for i in range(1, quantidade_de_dias[month] + (year % 4 == 0 if month == 2 else 0) + 1)]
+            dias_possiveis = [i for i in range(1, calendar.monthrange(year, month)[1] + 1)]
         else:
-            dias_possiveis = [i for i in range(dia_atual, quantidade_de_dias[month] + (year % 4 == 0 if month == 2 else 0) + 1)]
+            dias_possiveis = [i for i in range(dia_atual, calendar.monthrange(year, month)[1] + 1)]
 
         nonlocal menu_dias
         nonlocal menu_dia_final
@@ -185,7 +189,7 @@ def adicionar_evento():
         label_dias.pack(side='top')
         menu_dias.pack(side='left')
 
-        container_dia.pack(side='left', padx=2)
+        container_dia.pack(side='left')
 
     def mostrarMenuMeses(ano):
         if int(ano) > ano_atual:
@@ -208,26 +212,26 @@ def adicionar_evento():
 
         label_meses.pack(side='top')
         menu_meses.pack(side='bottom')
-        container_mes.pack(side='left', padx=2)
+        container_mes.pack(side='left')
 
     label_anos = ttk.Label(container_ano, text='Selecione o Ano: ', font=FONT, anchor='w')
     menu_anos = ttk.OptionMenu(container_ano, ano, anos_possiveis[0], *list(anos_possiveis), command=mostrarMenuMeses)
 
     label_anos.pack(side='top')
     menu_anos.pack(side='bottom')
-    container_ano.pack(side='left', padx=2)
+    container_ano.pack(side='left')
 
     Adicionar_Evento.mainloop()
 
 def remover_evento():
+
     remover_Evento = Toplevel()
+    remover_Evento.configure(background=BACKGROUND)
+
     mes_atual = date.today().month
     ano_atual = date.today().year
 
     anos_possiveis = [ano_atual + i for i in range(0, 11)]
-
-    estilo_menu = ttk.Style(remover_Evento)
-    estilo_menu.configure('TMenubutton', font=FONT, border=0, borderwidth=0, borderradius=10, width=9, radius=50, anchor='center')
 
     ano = IntVar()
     mes = StringVar()
@@ -297,7 +301,8 @@ def remover_evento():
                     x.pop(i)
                     break
         criar_lista()
-        atualizarEventos(ano_calendario, mes_calendario)
+        if ano.get() == ano_calendario and meses_por_indice[mes.get()] == mes_calendario:
+            atualizarEventos(ano_calendario, mes_calendario)
 
     label_anos = ttk.Label(container_ano, text='Selecione o Ano:', font=FONT, anchor='w')
     menu_anos = ttk.OptionMenu(container_ano, ano, anos_possiveis[0], *anos_possiveis, command=mostrarMenuMeses)
@@ -444,29 +449,9 @@ eventos = {2024:{
                             [[16], False, 'Período para Registro da Oferta de Disciplinas, pelos Colegiados de Cursos de Graduação Semestral e Pós-Graduação stricto sensu – 2º/2024. Período para solicitação de Colação de Grau – estudantes veteranos que já concluíram e os concluintes do 1º/2024 – cursos de graduação semestral.']]
             }
 }
-# Mapeamento de numeros dos meses para seus nomes correspondentes
-meses_por_indice = {
-    1: 'Janeiro',
-    2: 'Fevereiro',
-    3: 'Marco',
-    4: 'Abril',
-    5: 'Maio',
-    6: 'Junho',
-    7: 'Julho',
-    8: 'Agosto',
-    9: 'Setembro',
-    10: 'Outubro',
-    11: 'Novembro',
-    12: 'Dezembro'
-}
 
 root = Tk()
 root.config(background=BACKGROUND)
-
-estilo_botao = ttk.Style(root)
-estilo_botao.theme_use('alt')
-estilo_botao.configure('TButton', background=BACKGROUND, foreground = FOREGROUND, font=BUTTONFONT, borderwidth=0, focusthickness=0, focuscolor='none', width = 20)
-estilo_botao.map('TButton', background=[('active',BACKGROUND)])
 
 mes_calendario = date.today().month
 ano_calendario = date.today().year
@@ -505,4 +490,5 @@ frame_mestre.pack(side='left')
 
 # Inicializa o calendario com o mes e ano atuais
 atualizar_calendario(ano_calendario, mes_calendario)
+estilizar()
 root.mainloop()
