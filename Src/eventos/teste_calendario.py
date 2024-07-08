@@ -17,7 +17,7 @@ def main():
     log2 = calendario.criar_evento('18/09/2024', '19/09/2024', 'Zoro', False)
     log2 = calendario.criar_evento('18/09/2024', '19/09/2024', 'Luffy', True)
     log2 = calendario.criar_evento('18/10/2024', '19/10/2024', 'Luffyssss', True)
-    log2 = calendario.criar_evento('18/10/2024', '25/10/2024', 'Inscricao estagio', True)
+    log2 = calendario.criar_evento('18/01/2025', '20/01/2025', 'Inscricao', True)
     eventos = calendario.busca_eventos()
     print(eventos)
 

@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-from datetime import date
+from datetime import datetime, date
 from formatacao import *
 from lista_eventos import ListaEventos
 import calendar
@@ -99,6 +99,10 @@ def adicionar_evento():
         else:
             eventos.update({ano_int:{mes_str:[novo_evento]}})
         eventos[ano_int][mes_str].sort()
+
+        data_inicial = f'{dia_inicial.get().zfill(2)}/{str(meses_por_indice[mes_str]).zfill(2)}/{ano_int}'
+        data_final = f'{dia_final.get().zfill(2)}/{str(meses_por_indice[mes_str]).zfill(2)}/{ano_int}'
+        v.criar_evento(data_inicial, data_final, info.get(), funciona.get())
 
     def send_data_2():
         nonlocal Adicionar_Evento
@@ -273,7 +277,9 @@ def remover_evento():
         while check(x) > 0:
             for i in range(0, len(x)):
                 if x[i].get() == 1:
-                    lista_eventos.pop(i)
+                    info_evento = lista_eventos.pop(i)
+                    data = f'{str(info_evento[0][0]).zfill(2)}/{str(meses_por_indice[mes.get()]).zfill(2)}/{ano.get()}'
+                    v.remover_evento(data, info_evento[-1])
                     x.pop(i)
                     break
         criar_lista()

@@ -18,7 +18,7 @@ class ListaEventos:
 
     def remover_evento(self, data: str, descricao_evento: str) -> str:
         """
-        Remove um evento especificado por data e descrição do evento.
+        Remove um evento por data e descrição do evento.
         """
         try:
             eventos_do_dia = self.__eventos[data]
@@ -94,7 +94,7 @@ class ListaEventos:
             data_final_formatada = datetime.strptime(data_final, ListaEventos.formatacao_data).date()
             dias = data_final_formatada - data_inicial_formatada
 
-            nao_funciona_evento = 0 if nao_funciona else 1
+            nao_funciona_evento = 1 if nao_funciona else 0
 
             self.__eventos[data_inicial].add(f'{nao_funciona_evento} - {evento} - {dias.days}')
             self.__salvar_eventos()
