@@ -87,18 +87,20 @@ def adicionar_evento():
         ano_int = int(ano.get())
         mes_str = mes.get()
 
-        if dia_inicial.get() == dia_final.get():
-            novo_evento = [[int(dia_inicial.get())], funciona.get(), info.get()]
-        else:
-            novo_evento = [[int(dia_inicial.get()), int(dia_final.get())], funciona.get(), info.get()]
-        if eventos.get(ano_int) is not None:
-            if (eventos[ano_int]).get(mes_str) is not None:
-                eventos[ano_int][mes_str].append(novo_evento)
+        if len(info.get()):
+            if dia_inicial.get() == dia_final.get():
+                novo_evento = [[int(dia_inicial.get())], funciona.get(), info.get()]
             else:
-                eventos[ano_int].update({mes_str: [novo_evento]})
-        else:
-            eventos.update({ano_int:{mes_str:[novo_evento]}})
-        eventos[ano_int][mes_str].sort()
+                novo_evento = [[int(dia_inicial.get()), int(dia_final.get())], funciona.get(), info.get()]
+            if eventos.get(ano_int) is not None:
+                if (eventos[ano_int]).get(mes_str) is not None:
+                    if novo_evento not in eventos[ano_int][mes_str]:
+                        eventos[ano_int][mes_str].append(novo_evento)
+                else:
+                    eventos[ano_int].update({mes_str: [novo_evento]})
+            else:
+                eventos.update({ano_int:{mes_str:[novo_evento]}})
+            eventos[ano_int][mes_str].sort()
 
         #Integracao back e front - adicionando evento no arquivo de texto
         data_inicial = f'{dia_inicial.get().zfill(2)}/{str(meses_por_indice[mes_str]).zfill(2)}/{ano_int}'
