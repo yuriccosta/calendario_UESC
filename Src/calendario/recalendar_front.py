@@ -41,7 +41,7 @@ def adicionar_evento():
    
     anos_possiveis = [ano_atual + i for i in range(0, 11)]
 
-    Adicionar_Evento = Toplevel()
+    Adicionar_Evento = Toplevel(root)
     Adicionar_Evento.title('Adicionar Evento')
     Adicionar_Evento.resizable(False, False)
     Adicionar_Evento.configure(background=BACKGROUND)
@@ -218,7 +218,7 @@ def adicionar_evento():
 
 def remover_evento():
 
-    remover_Evento = Toplevel()
+    remover_Evento = Toplevel(root)
     remover_Evento.title('Remover Evento')
     remover_Evento.resizable(False, False)
     remover_Evento.configure(background=BACKGROUND)
