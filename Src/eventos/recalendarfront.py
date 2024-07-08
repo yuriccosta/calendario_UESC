@@ -100,6 +100,7 @@ def adicionar_evento():
             eventos.update({ano_int:{mes_str:[novo_evento]}})
         eventos[ano_int][mes_str].sort()
 
+        #Integracao back e front - adicionando evento no arquivo de texto
         data_inicial = f'{dia_inicial.get().zfill(2)}/{str(meses_por_indice[mes_str]).zfill(2)}/{ano_int}'
         data_final = f'{dia_final.get().zfill(2)}/{str(meses_por_indice[mes_str]).zfill(2)}/{ano_int}'
         v.criar_evento(data_inicial, data_final, info.get(), funciona.get())
@@ -277,6 +278,7 @@ def remover_evento():
         while check(x) > 0:
             for i in range(0, len(x)):
                 if x[i].get() == 1:
+                    #Integracao back e front - removendo evento do arquivo de texto
                     info_evento = lista_eventos.pop(i)
                     data = f'{str(info_evento[0][0]).zfill(2)}/{str(meses_por_indice[mes.get()]).zfill(2)}/{ano.get()}'
                     v.remover_evento(data, info_evento[-1])
@@ -417,23 +419,8 @@ def atualizarEventos(ano, mes):
     
     eventos_frame.pack(side='left', anchor='n')
 
-#Inicializao do dicionario de eventos
+#Inicializao do dicionario de eventos - carregando do arquivo de eventos
 eventos = v.busca_eventos()
-"""
-eventos = {2024:{
-                'Julho': [[[1], False, 'Nada'], 
-                        [[2,6], False, 'Nada de novo']],
-                'Agosto':[[[25], True, 'Outro Nada'], 
-                        [[31], False, 'Acertou, Nada']],
-                'Dezembro':[[[25], True, 'Natal'], 
-                            [[31], True, 'Ano Novo']]
-                },
-            2025:{
-                'Janeiro': [[[1], True, 'Dia da Paz'],
-                            [[6], False, 'Aniversário'],
-                            [[16], False, 'Período para Registro da Oferta de Disciplinas, pelos Colegiados de Cursos de Graduação Semestral e Pós-Graduação stricto sensu – 2º/2024. Período para solicitação de Colação de Grau – estudantes veteranos que já concluíram e os concluintes do 1º/2024 – cursos de graduação semestral.']]
-            }
-}"""
 
 root = Tk()
 root.config(background=BACKGROUND)
