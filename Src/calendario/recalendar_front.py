@@ -7,6 +7,9 @@ from lista_eventos import ListaEventos
 import calendar
 
 v = ListaEventos()
+#Inicializao do dicionario de eventos - carregando do arquivo de eventos
+eventos = v.busca_eventos()
+
 
 WIDTH = 100
 FONT = ('Calibri', 12)
@@ -51,6 +54,7 @@ def adicionar_evento():
     mes = StringVar()
     dia_inicial = StringVar()
     dia_final = StringVar()
+    info = StringVar()
     funciona = BooleanVar()
 
     container_ano = ttk.Frame(Adicionar_Evento)
@@ -65,7 +69,7 @@ def adicionar_evento():
 
     def entry():
         nonlocal container_evento
-        global info
+        nonlocal info
         nonlocal funciona
 
         container_evento.destroy()
@@ -88,7 +92,7 @@ def adicionar_evento():
 
     def adicionar_ao_dicionario():
 
-        global info
+        nonlocal info
         nonlocal funciona
         nonlocal ano
         nonlocal mes
@@ -105,7 +109,12 @@ def adicionar_evento():
                 novo_evento = [[int(dia_inicial.get()), int(dia_final.get())], funciona.get(), info.get()]
             if eventos.get(ano_int) is not None:
                 if (eventos[ano_int]).get(mes_str) is not None:
-                    if novo_evento not in eventos[ano_int][mes_str]:
+                    possui = False
+                    for evento in eventos[ano_int][mes_str]:
+                        possui = (novo_evento[0] == evento[0] and novo_evento[1] == evento[1] and novo_evento[-1].lower() == evento[-1].lower())
+                        if possui:
+                            break
+                    if not possui:
                         eventos[ano_int][mes_str].append(novo_evento)
                 else:
                     eventos[ano_int].update({mes_str: [novo_evento]})
@@ -127,7 +136,7 @@ def adicionar_evento():
             atualizarEventos(ano_calendario, mes_calendario)
 
     def send_data():
-        global info
+        nonlocal info
         adicionar_ao_dicionario()
         if int(ano.get()) == ano_calendario and meses_por_indice[mes.get()] == mes_calendario:
             atualizarEventos(ano_calendario, mes_calendario)
@@ -440,9 +449,6 @@ def atualizarEventos(ano, mes):
         eventos_sem_funcionamento.pack(side='top', anchor='w')
     
     eventos_frame.pack(side='left', anchor='n')
-
-#Inicializao do dicionario de eventos - carregando do arquivo de eventos
-eventos = v.busca_eventos()
 
 root = Tk()
 root.title('Calendário')
