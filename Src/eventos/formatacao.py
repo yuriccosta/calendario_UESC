@@ -22,6 +22,13 @@ def wrap_text(texto: str, tamanho_minimo = 50, tamanho_maximo = 150):
             contador += 1
     return texto
 
+def height_text(text) -> int:
+    height = 1
+    for i in range(len(text)):
+        if text[i] == '\n':
+            height += 1
+    return height
+
 meses_por_indice = {
     'Janeiro': 1,
     'Fevereiro': 2,

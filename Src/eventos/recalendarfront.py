@@ -12,18 +12,25 @@ FONT = ('Calibri', 12)
 BUTTONFONT = ('Calibri', 12)
 SFONT = ('Calibri', 12)
 BFONT = ('Calibri', 12, 'bold')
+DFONT = ('Calibri', 14)
 BACKGROUND = '#d1d1d1'
+TBACKGROUND = '#f5f542'
+HBACKGROUND = '#3895ff'
 FOREGROUND = '#1b1d24'
 
 def estilizar():
     ttk.Style(root).theme_use('alt')
+    ttk.Style(root).configure('alt', background=BACKGROUND)
     ttk.Style(root).configure('TButton', background=BACKGROUND, foreground = FOREGROUND, font=BUTTONFONT, borderwidth=0, focusthickness=0, focuscolor='none', width = 20)
     ttk.Style(root).map('TButton', background=[('active',BACKGROUND)])
-    ttk.Style(root).configure('TMenubutton', font=FONT, border=0, borderwidth=0, borderradius=10, width=9, radius=50, anchor='center')
-    ttk.Style(root).configure('TCheckbutton', font=FONT, borderwidth=0, focusthickness=0, focuscolor='none')
+    ttk.Style(root).configure('TMenubutton', font=FONT, border=0, borderwidth=0, borderradius=10, width=9, radius=50, anchor='center', background = BACKGROUND)
+    ttk.Style(root).configure('TCheckbutton', font=FONT, borderwidth=0, focusthickness=0, focuscolor='none', background=BACKGROUND)
     ttk.Style(root).map('TCheckbutton', background=[('hover', BACKGROUND)])
     ttk.Style(root).configure('TFrame', background=BACKGROUND)
-
+    ttk.Style(root).configure('TLabel', background = BACKGROUND)
+    header_button = ttk.Style(root)
+    header_button.configure('header.TButton', background=HBACKGROUND, foreground = FOREGROUND, font=DFONT, borderwidth=0, focusthickness=0, focuscolor='none', width = 20)
+    header_button.map('header.TButton', background=[('active',HBACKGROUND)])
 
 
 def adicionar_evento():
@@ -34,6 +41,8 @@ def adicionar_evento():
     anos_possiveis = [ano_atual + i for i in range(0, 11)]
 
     Adicionar_Evento = Toplevel()
+    Adicionar_Evento.title('Adicionar Evento')
+    Adicionar_Evento.resizable(False, False)
     Adicionar_Evento.configure(background=BACKGROUND)
 
     ano = StringVar()
@@ -209,6 +218,8 @@ def adicionar_evento():
 def remover_evento():
 
     remover_Evento = Toplevel()
+    remover_Evento.title('Remover Evento')
+    remover_Evento.resizable(False, False)
     remover_Evento.configure(background=BACKGROUND)
 
     mes_atual = date.today().month
@@ -232,8 +243,10 @@ def remover_evento():
         nonlocal container_mes
         nonlocal container
         nonlocal menu_meses
+        nonlocal container
 
         container_mes.destroy()
+        container.destroy()
 
         container_mes = ttk.Frame(remover_Evento)
         label_meses = ttk.Label(container_mes, text='Selecione o mês:', font=FONT, anchor='w')
@@ -299,8 +312,6 @@ def remover_evento():
 
     remover_Evento.mainloop()
 
-    remover_Evento.mainloop()
-
 def anterior():
     global mes_calendario
     global ano_calendario
@@ -341,6 +352,7 @@ def voltar():
     atualizar_calendario(ano_calendario, mes_calendario)
 
 def atualizar_calendario(ano, mes):
+    global header_container
     # Remove todos os widgets existentes no calendario
     for widget in calendario_frame.winfo_children():
         widget.destroy()
@@ -350,17 +362,21 @@ def atualizar_calendario(ano, mes):
     linha, coluna = 0, 0
 
     # Adiciona o cabecalho ao calendario
+    header_container.destroy()
+    header_container = Frame(top_frame, background=HBACKGROUND, width=50)
     for day in header:
-        ttk.Label(calendario_frame, text=day, font=SFONT, background=BACKGROUND, foreground=FOREGROUND).grid(column=coluna, row=linha, padx=5)
+        ttk.Label(header_container, text=day, font=DFONT, background=HBACKGROUND, foreground=FOREGROUND, width=3, anchor='center', justify='center').grid(column=coluna, row=linha, padx=5)
         coluna += 1
         if not coluna % 7:
             coluna = 0
             linha += 1
+    header_container.pack()
 
     # Obtem as semanas do mes com os dias correspondentes
     testing = calendar.Calendar().monthdays2calendar(ano, mes)
     hoje = [date.today().day, date.today().month, date.today().year]
     
+    month_container = Frame(calendario_frame, background=BACKGROUND)
     # Preenche o calendario com os dias do mes
     for semana in testing:
         for dia in semana:
@@ -371,12 +387,13 @@ def atualizar_calendario(ano, mes):
                 continue  # Ignora dias que nao pertencem ao mes atual
             # Marca o dia atual com uma cor diferente
             if dia[0] == hoje[0] and mes == hoje[1] and ano == hoje[2]:
-                ttk.Label(calendario_frame, text=dia[0], font=SFONT, foreground='#1e3194', background=BACKGROUND).grid(row=linha, column=coluna, padx=5)
+                ttk.Label(month_container, text=dia[0], font=DFONT, foreground='#1e3194', background=TBACKGROUND, width=3, anchor='center', justify='center').grid(row=linha, column=coluna, padx=5)
             elif coluna == 0 or coluna == 6:
-                ttk.Label(calendario_frame, text=dia[0], font=SFONT, foreground='#0c0d12', background=BACKGROUND).grid(row=linha, column=coluna, padx=5)
+                ttk.Label(month_container, text=dia[0], font=DFONT, foreground='#0c0d12', background=BACKGROUND, width=3, anchor='center', justify='center').grid(row=linha, column=coluna, padx=5)
             else:
-                ttk.Label(calendario_frame, text=dia[0], font=SFONT, foreground=FOREGROUND, background=BACKGROUND).grid(row=linha, column=coluna, padx=5)
-    
+                ttk.Label(month_container, text=dia[0], font=DFONT, foreground=FOREGROUND, background=BACKGROUND, width=3, anchor='center', justify='center').grid(row=linha, column=coluna, padx=5)
+    month_container.pack()
+
     atualizarEventos(ano, mes)
 
 def separarListas(ano, mes):
@@ -404,18 +421,18 @@ def atualizarEventos(ano, mes):
         eventos_genericos = ttk.Frame(eventos_frame)
         for evento in lista_genericos:
             container = ttk.Frame(eventos_genericos)
-            ttk.Label(container, text=f'{format(evento[0])}', background='#E0E0E0', font=BFONT, width= 7, justify='center').pack(side='left', anchor='w', ipadx=2)
-            ttk.Label(container, text=wrap_text(evento[-1], 50, WIDTH), background='#F3F3F3', font=FONT, width=WIDTH).pack(side='left', anchor='w')
+            Label(container, text=f'{format(evento[0])}', background='#E0E0E0', font=BFONT, width= 7, justify='center', height=height_text(wrap_text(evento[-1]))).pack(side='left', anchor='w', ipadx=2)
+            Label(container, text=wrap_text(evento[-1], 50, WIDTH), background='#F3F3F3', font=FONT, width=WIDTH, anchor='w', justify='left',height=height_text(wrap_text(evento[-1]))).pack(side='left', anchor='w')
             container.pack(side='top', anchor='w',pady=1)
         eventos_genericos.pack(side='top', anchor='w')
 
     if lista_sem_funcionamento is not None and len(lista_sem_funcionamento) > 0:
         eventos_sem_funcionamento = ttk.Frame(eventos_frame)
-        ttk.Label(eventos_sem_funcionamento, text='Dias que a UESC não funciona: '.upper(), font=BFONT).pack(side='top', anchor='w')
+        ttk.Label(eventos_sem_funcionamento, text='Dias que a UESC não funciona: '.upper(), font=BFONT, background=BACKGROUND).pack(side='top', anchor='w')
         for evento in lista_sem_funcionamento:
             container = ttk.Frame(eventos_sem_funcionamento)
-            ttk.Label(container, text=f'{format(evento[0])}', background='#FFCED1', foreground='#C00' ,font=BFONT, width= 7, justify='center',).pack(side='left', anchor='center', ipadx=2)
-            ttk.Label(container, text=wrap_text(evento[-1], 50, WIDTH), background='#FFF0F1', foreground='#C00', font=BFONT, width=WIDTH).pack(side='left', anchor='w')
+            Label(container, text=f'{format(evento[0])}', background='#FFCED1', foreground='#C00' ,font=BFONT, width= 7, justify='center', height=height_text(wrap_text(evento[-1]))).pack(side='left', anchor='center', ipadx=2)
+            Label(container, text=wrap_text(evento[-1], 50, WIDTH), background='#FFF0F1', foreground='#C00', font=BFONT, width=WIDTH, justify='left', anchor='w',height=height_text(wrap_text(evento[-1]))).pack(side='left', anchor='w')
             container.pack(side='top', anchor='w',pady=1)
         eventos_sem_funcionamento.pack(side='top', anchor='w')
     
@@ -425,6 +442,8 @@ def atualizarEventos(ano, mes):
 eventos = v.busca_eventos()
 
 root = Tk()
+root.title('Calendário')
+root.resizable(False, False)
 root.config(background=BACKGROUND)
 
 mes_calendario = date.today().month
@@ -436,16 +455,19 @@ lista_sem_funcionamento = []
 
 frame_mestre = Frame(root, background=BACKGROUND)
 calendario_frame = Frame(frame_mestre, background=BACKGROUND)
-btn_frame = Frame(frame_mestre, background=BACKGROUND)
+top_frame = Frame(frame_mestre, background=HBACKGROUND)
+btn_frame = Frame(top_frame, background=HBACKGROUND)
+header_container = Frame(top_frame, background=HBACKGROUND)
 eventos_frame = Frame(root, background=BACKGROUND)
 
-anterior_btn = ttk.Button(btn_frame, text='<', command=anterior, width=5)
+
+anterior_btn = ttk.Button(btn_frame, text='<', command=anterior, width=5, style='header.TButton')
 anterior_btn.pack(side='left')
 
-voltar_inicio = ttk.Button(btn_frame, textvariable=data, command=voltar)
+voltar_inicio = ttk.Button(btn_frame, textvariable=data, command=voltar, style='header.TButton')
 voltar_inicio.pack(side='left', padx=2)
 
-proximo_btn = ttk.Button(btn_frame, text='>', command=proximo, width=5)
+proximo_btn = ttk.Button(btn_frame, text='>', command=proximo, width=5, style='header.TButton')
 proximo_btn.pack(side='left')
 
 add_remover_deck = ttk.Frame(frame_mestre)
@@ -458,9 +480,10 @@ remover_btn.pack(side='left', anchor='w')
 
 add_remover_deck.pack(side='bottom', anchor='center')
 
-btn_frame.pack(side='top', pady=5)
+btn_frame.pack(side='top')
+top_frame.pack(side='top')
 calendario_frame.pack(side='top', anchor='center',fill='none', expand=True)
-frame_mestre.pack(side='left')
+frame_mestre.pack(side='left', anchor='n')
 
 # Inicializa o calendario com o mes e ano atuais
 atualizar_calendario(ano_calendario, mes_calendario)
