@@ -42,6 +42,7 @@ def adicionar_evento():
     anos_possiveis = [ano_atual + i for i in range(0, 11)]
 
     Adicionar_Evento = Toplevel(root)
+    Adicionar_Evento.wm_geometry(f'+{Adicionar_Evento.winfo_screenmmwidth()//2 + Adicionar_Evento.winfo_width()//2}+{Adicionar_Evento.winfo_screenmmheight()//2 + Adicionar_Evento.winfo_height()//2}')
     Adicionar_Evento.title('Adicionar Evento')
     Adicionar_Evento.resizable(False, False)
     Adicionar_Evento.configure(background=BACKGROUND)
@@ -219,6 +220,7 @@ def adicionar_evento():
 def remover_evento():
 
     remover_Evento = Toplevel(root)
+    remover_Evento.wm_geometry(f'+{remover_Evento.winfo_screenmmwidth()//2 + remover_Evento.winfo_width()//2}+{remover_Evento.winfo_screenmmheight()//2 + remover_Evento.winfo_height()//2}')
     remover_Evento.title('Remover Evento')
     remover_Evento.resizable(False, False)
     remover_Evento.configure(background=BACKGROUND)
@@ -444,6 +446,7 @@ eventos = v.busca_eventos()
 
 root = Tk()
 root.title('Calendário')
+root.wm_geometry(f'+{root.winfo_screenmmwidth()//2 + root.winfo_width()//2}+{root.winfo_screenmmheight()//2 + root.winfo_height()//2}')
 root.resizable(False, False)
 root.config(background=BACKGROUND)
 
