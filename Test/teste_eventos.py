@@ -1,10 +1,10 @@
-from eventos import Eventos
+from Src.eventos.lista_eventos import ListaEventos
 
 def main():
     """
     Utilize este arquivo para testar funcionalidades especificas da classe eventos.
     """
-    v = Eventos()
+    v = ListaEventos()
 
     v.criar_evento('09/07/2024', 'Encerramento semestre 2024/1')
     v.criar_evento('10/07/2024', 'Trabalho de Prog')

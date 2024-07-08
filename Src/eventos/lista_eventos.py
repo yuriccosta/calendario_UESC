@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from collections import defaultdict
 
-class Eventos:
+class ListaEventos:
 
     formatacao_data = '%d/%m/%Y'
 
@@ -14,6 +14,9 @@ class Eventos:
     def eventos(self) -> defaultdict:
         return self.__eventos
     
+
+    def remover_evento(self):
+        pass
 
     def eventos_por_mes(self, mes: int, ano: int = 2024) -> list[list]:
         """
@@ -47,7 +50,7 @@ class Eventos:
 
 
     def __calcula_tempo_evento(self, data_inicial: str, dias: int) -> str:
-        data = datetime.strptime(data_inicial, Eventos.formatacao_data).date()
+        data = datetime.strptime(data_inicial, ListaEventos.formatacao_data).date()
         ano, mes, dia = str(data + timedelta(dias)).split('-')
         data_final = f'{dia}/{mes}/{ano}'
         return data_final
@@ -58,8 +61,8 @@ class Eventos:
         Cria um novo evento e retorna uma string para ser usado no front.
         """
         if self.__verifica_data(data_inicial, data_final):
-            data_inicial_formatada = datetime.strptime(data_inicial, Eventos.formatacao_data).date()
-            data_final_formatada = datetime.strptime(data_final, Eventos.formatacao_data).date()
+            data_inicial_formatada = datetime.strptime(data_inicial, ListaEventos.formatacao_data).date()
+            data_final_formatada = datetime.strptime(data_final, ListaEventos.formatacao_data).date()
             dias = data_final_formatada - data_inicial_formatada
             self.__eventos[data_inicial].add(f'{nao_funciona} - {evento} - {dias.days}')
             self.__salvar_eventos()
@@ -73,8 +76,8 @@ class Eventos:
         Verifica se a data é do dia ou futura, caso contrário retorna Falso.
         """
         try:
-            data_inicial = datetime.strptime(data_str1, Eventos.formatacao_data).date()
-            data_final = datetime.strptime(data_str2, Eventos.formatacao_data).date()
+            data_inicial = datetime.strptime(data_str1, ListaEventos.formatacao_data).date()
+            data_final = datetime.strptime(data_str2, ListaEventos.formatacao_data).date()
             data_atual = datetime.now().date()
             return data_inicial >= data_atual <= data_final
         except ValueError:
