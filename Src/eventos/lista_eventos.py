@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from collections import defaultdict
 
-class Eventos:
+class ListaEventos:
 
     formatacao_data = '%d/%m/%Y'
 
@@ -15,6 +15,9 @@ class Eventos:
         return self.__eventos
     
 
+    def remover_evento(self):
+        pass
+
     def eventos_por_mes(self, mes: int, ano: int = 2024) -> list[list]:
         """
         O método retorna todos os eventos referentes a determinado mês/ano.
@@ -26,10 +29,12 @@ class Eventos:
             if int(aux[1]) == mes and int(aux[2]) == ano:
                 data = f'{lista_eventos[i][0]}/{lista_eventos[i][1]}/{lista_eventos[i][2]}'
                 for evento in self.__eventos[data]:
-                    descricao_evento, dias = evento.split('-')
+                    descricao_evento, nao_funciona, dias = evento.split('-')
                     descricao_evento = descricao_evento[0:-1]
+                    nao_funciona = nao_funciona[1:-1]
+                    print(nao_funciona)
                     data_final = self.__calcula_tempo_evento(data, int(dias))
-                    lista.append([data, data_final, descricao_evento])
+                    lista.append([data, data_final, descricao_evento, nao_funciona])
         lista.sort(key = lambda x: x[0])
 
         return lista
@@ -45,22 +50,21 @@ class Eventos:
 
 
     def __calcula_tempo_evento(self, data_inicial: str, dias: int) -> str:
-        data = datetime.strptime(data_inicial, Eventos.formatacao_data).date()
+        data = datetime.strptime(data_inicial, ListaEventos.formatacao_data).date()
         ano, mes, dia = str(data + timedelta(dias)).split('-')
         data_final = f'{dia}/{mes}/{ano}'
         return data_final
 
 
-    def criar_evento(self, data_inicial: str, data_final: str, evento: str) -> str:
+    def criar_evento(self, data_inicial: str, data_final: str, evento: str, nao_funciona: bool) -> str:
         """
         Cria um novo evento e retorna uma string para ser usado no front.
         """
         if self.__verifica_data(data_inicial, data_final):
-            data_inicial_formatada = datetime.strptime(data_inicial, Eventos.formatacao_data).date()
-            data_final_formatada = datetime.strptime(data_final, Eventos.formatacao_data).date()
+            data_inicial_formatada = datetime.strptime(data_inicial, ListaEventos.formatacao_data).date()
+            data_final_formatada = datetime.strptime(data_final, ListaEventos.formatacao_data).date()
             dias = data_final_formatada - data_inicial_formatada
-
-            self.__eventos[data_inicial].add(f'{evento} - {dias.days}')
+            self.__eventos[data_inicial].add(f'{nao_funciona} - {evento} - {dias.days}')
             self.__salvar_eventos()
             return 'Evento registrado com sucesso!'
         else:
@@ -72,8 +76,8 @@ class Eventos:
         Verifica se a data é do dia ou futura, caso contrário retorna Falso.
         """
         try:
-            data_inicial = datetime.strptime(data_str1, Eventos.formatacao_data).date()
-            data_final = datetime.strptime(data_str2, Eventos.formatacao_data).date()
+            data_inicial = datetime.strptime(data_str1, ListaEventos.formatacao_data).date()
+            data_final = datetime.strptime(data_str2, ListaEventos.formatacao_data).date()
             data_atual = datetime.now().date()
             return data_inicial >= data_atual <= data_final
         except ValueError:
@@ -89,8 +93,8 @@ class Eventos:
         try:
             with open('eventos.txt', 'r') as file:
                 for line in file:
-                    data, evento, dias = line.strip().split(' - ')
-                    self.__eventos[data].add(f'{evento} - {dias}')
+                    data, nao_funciona, evento, dias  = line.strip().split(' - ')
+                    self.__eventos[data].add(f'{nao_funciona} - {evento} - {dias}')
         except FileNotFoundError:
             pass
 
