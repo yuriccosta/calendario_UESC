@@ -129,7 +129,7 @@ class ListaEventos:
         já será inicializado vazio.
         """
         try:
-            with open('resources/eventos.txt', 'r') as file:
+            with open('eventos.txt', 'r') as file:
                 for line in file:
                     data, nao_funciona, evento, dias  = line.strip().split(' - ')
                     self.__eventos[data].add(f'{nao_funciona} - {evento} - {dias}')
@@ -141,7 +141,7 @@ class ListaEventos:
         """
         Método auxiliar ao método cria_eventos, apenas salva um novo evento no arquivo txt.
         """
-        with open('resources/eventos.txt', 'w+') as file:
+        with open('eventos.txt', 'w+') as file:
             for data, eventos in self.__eventos.items():
                 for evento in eventos:
                     file.write(f'{data} - {evento}\n')
