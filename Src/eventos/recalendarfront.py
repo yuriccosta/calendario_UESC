@@ -421,8 +421,8 @@ def atualizarEventos(ano, mes):
         eventos_genericos = ttk.Frame(eventos_frame)
         for evento in lista_genericos:
             container = ttk.Frame(eventos_genericos)
-            Label(container, text=f'{format(evento[0])}', background='#E0E0E0', font=BFONT, width= 7, justify='center', height=height_text(wrap_text(evento[-1]))).pack(side='left', anchor='w', ipadx=2)
-            Label(container, text=wrap_text(evento[-1], 50, WIDTH), background='#F3F3F3', font=FONT, width=WIDTH, anchor='w', justify='left',height=height_text(wrap_text(evento[-1]))).pack(side='left', anchor='w')
+            Label(container, text=f'{format(evento[0])}', background='#E0E0E0', font=BFONT, width= 7, justify='center', height=height_text(wrap_text(evento[-1], 50, WIDTH))).pack(side='left', anchor='w', ipadx=2)
+            Label(container, text=wrap_text(evento[-1], 50, WIDTH), background='#F3F3F3', font=FONT, width=WIDTH, anchor='w', justify='left',height=height_text(wrap_text(evento[-1], 50, WIDTH))).pack(side='left', anchor='w')
             container.pack(side='top', anchor='w',pady=1)
         eventos_genericos.pack(side='top', anchor='w')
 
@@ -431,8 +431,8 @@ def atualizarEventos(ano, mes):
         ttk.Label(eventos_sem_funcionamento, text='Dias que a UESC não funciona: '.upper(), font=BFONT, background=BACKGROUND).pack(side='top', anchor='w')
         for evento in lista_sem_funcionamento:
             container = ttk.Frame(eventos_sem_funcionamento)
-            Label(container, text=f'{format(evento[0])}', background='#FFCED1', foreground='#C00' ,font=BFONT, width= 7, justify='center', height=height_text(wrap_text(evento[-1]))).pack(side='left', anchor='center', ipadx=2)
-            Label(container, text=wrap_text(evento[-1], 50, WIDTH), background='#FFF0F1', foreground='#C00', font=BFONT, width=WIDTH, justify='left', anchor='w',height=height_text(wrap_text(evento[-1]))).pack(side='left', anchor='w')
+            Label(container, text=f'{format(evento[0])}', background='#FFCED1', foreground='#C00' ,font=BFONT, width= 7, justify='center', height=height_text(wrap_text(evento[-1], 50, WIDTH))).pack(side='left', anchor='center', ipadx=2)
+            Label(container, text=wrap_text(evento[-1], 50, WIDTH), background='#FFF0F1', foreground='#C00', font=BFONT, width=WIDTH, justify='left', anchor='w',height=height_text(wrap_text(evento[-1], 50, WIDTH))).pack(side='left', anchor='w')
             container.pack(side='top', anchor='w',pady=1)
         eventos_sem_funcionamento.pack(side='top', anchor='w')
     
