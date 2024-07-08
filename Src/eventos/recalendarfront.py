@@ -102,10 +102,10 @@ def adicionar_evento():
                 eventos.update({ano_int:{mes_str:[novo_evento]}})
             eventos[ano_int][mes_str].sort()
 
-        #Integracao back e front - adicionando evento no arquivo de texto
-        data_inicial = f'{dia_inicial.get().zfill(2)}/{str(meses_por_indice[mes_str]).zfill(2)}/{ano_int}'
-        data_final = f'{dia_final.get().zfill(2)}/{str(meses_por_indice[mes_str]).zfill(2)}/{ano_int}'
-        v.criar_evento(data_inicial, data_final, info.get(), funciona.get())
+            #Integracao back e front - adicionando evento no arquivo de texto
+            data_inicial = f'{dia_inicial.get().zfill(2)}/{str(meses_por_indice[mes_str]).zfill(2)}/{ano_int}'
+            data_final = f'{dia_final.get().zfill(2)}/{str(meses_por_indice[mes_str]).zfill(2)}/{ano_int}'
+            v.criar_evento(data_inicial, data_final, info.get(), funciona.get())
 
     def send_data_2():
         nonlocal Adicionar_Evento
