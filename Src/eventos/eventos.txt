@@ -1,4 +1,6 @@
-17/09/2024 - Aniversario Teste Teste Teste - True - 0
-18/09/2024 - Aniversario Teste Teste - False - 1
-18/09/2024 - Luffy - True - 1
-18/09/2024 - Zoro - False - 1
+17/09/2024 - 0 - Aniversario Teste Teste Teste - 0
+18/09/2024 - 1 - Zoro - 1
+18/09/2024 - 1 - Aniversario Teste Teste - 1
+18/09/2024 - 0 - Luffy - 1
+18/10/2024 - 0 - Inscricao estagio - 7
+18/10/2024 - 0 - Luffyssss - 1

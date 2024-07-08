@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from collections import defaultdict
+from meses import meses_por_indice
 
 class ListaEventos:
 
@@ -15,29 +16,58 @@ class ListaEventos:
         return self.__eventos
     
 
-    def remover_evento(self):
-        pass
+    def remover_evento(self, data: str, descricao_evento: str) -> str:
+        """
+        Remove um evento especificado por data e descrição do evento.
+        """
+        try:
+            eventos_do_dia = self.__eventos[data]
+            evento_para_remover = None
+            for evento in eventos_do_dia:
+                nao_funciona, descricao, dias = evento.split(' - ')
+                if descricao == descricao_evento:
+                    evento_para_remover = evento
+                    break
 
-    def eventos_por_mes(self, mes: int, ano: int = 2024) -> list[list]:
-        """
-        O método retorna todos os eventos referentes a determinado mês/ano.
-        Por padrão se apenas passar o mês, vai entender que está se referindo ao mês de 2024.
-        """
+            if evento_para_remover:
+                self.__eventos[data].remove(evento_para_remover)
+                if not self.__eventos[data]:  # Se não houver mais eventos na data, remova a chave
+                    del self.__eventos[data]
+                self.__salvar_eventos()
+                return 'Evento removido com sucesso!'
+            else:
+                return 'Evento não encontrado.'
+        except KeyError:
+            return 'Data não encontrada.'
+
+
+    def busca_eventos(self):
         lista_eventos = self.__lista_datas_eventos()
-        lista = []
-        for i, aux in enumerate(lista_eventos):
-            if int(aux[1]) == mes and int(aux[2]) == ano:
-                data = f'{lista_eventos[i][0]}/{lista_eventos[i][1]}/{lista_eventos[i][2]}'
-                for evento in self.__eventos[data]:
-                    descricao_evento, nao_funciona, dias = evento.split('-')
-                    descricao_evento = descricao_evento[0:-1]
-                    nao_funciona = nao_funciona[1:-1]
-                    print(nao_funciona)
-                    data_final = self.__calcula_tempo_evento(data, int(dias))
-                    lista.append([data, data_final, descricao_evento, nao_funciona])
-        lista.sort(key = lambda x: x[0])
+        eventos_dict = {}
+        
+        for i, _ in enumerate(lista_eventos):
+            data = f'{lista_eventos[i][0]}/{lista_eventos[i][1]}/{lista_eventos[i][2]}'
+            ano = int(lista_eventos[i][2])
+            mes = meses_por_indice[int(lista_eventos[i][1])]
+            
+            if ano not in eventos_dict:
+                eventos_dict[ano] = {}
+            if mes not in eventos_dict[ano]:
+                eventos_dict[ano][mes] = []
 
-        return lista
+            for evento in self.__eventos[data]:
+                nao_funciona, descricao_evento, dias = evento.split(' - ')
+                nao_funciona = True if int(nao_funciona) == 1 else False
+                dias = int(dias)
+                dia_evento = int(lista_eventos[i][0])
+                if dias > 0:
+                    dia_final = int(self.__calcula_tempo_evento(data, dias))
+                    eventos_dict[ano][mes].append([[dia_evento, dia_final], nao_funciona, descricao_evento])
+                else:
+                    eventos_dict[ano][mes].append([[dia_evento], nao_funciona, descricao_evento])
+
+        return eventos_dict
+    
     
     def __lista_datas_eventos(self) -> list[list]:
         lista_eventos = []
@@ -51,9 +81,8 @@ class ListaEventos:
 
     def __calcula_tempo_evento(self, data_inicial: str, dias: int) -> str:
         data = datetime.strptime(data_inicial, ListaEventos.formatacao_data).date()
-        ano, mes, dia = str(data + timedelta(dias)).split('-')
-        data_final = f'{dia}/{mes}/{ano}'
-        return data_final
+        _, _, dia = str(data + timedelta(dias)).split('-')
+        return dia
 
 
     def criar_evento(self, data_inicial: str, data_final: str, evento: str, nao_funciona: bool) -> str:
@@ -64,7 +93,10 @@ class ListaEventos:
             data_inicial_formatada = datetime.strptime(data_inicial, ListaEventos.formatacao_data).date()
             data_final_formatada = datetime.strptime(data_final, ListaEventos.formatacao_data).date()
             dias = data_final_formatada - data_inicial_formatada
-            self.__eventos[data_inicial].add(f'{nao_funciona} - {evento} - {dias.days}')
+
+            nao_funciona_evento = 0 if nao_funciona else 1
+
+            self.__eventos[data_inicial].add(f'{nao_funciona_evento} - {evento} - {dias.days}')
             self.__salvar_eventos()
             return 'Evento registrado com sucesso!'
         else:
