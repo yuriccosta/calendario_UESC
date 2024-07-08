@@ -1,8 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 from datetime import datetime, date
-from formatacao import *
-from meses import meses_por_indice
+from utils.formatacao import *
+from utils.meses import meses_por_indice
 from lista_eventos import ListaEventos
 import calendar
 
