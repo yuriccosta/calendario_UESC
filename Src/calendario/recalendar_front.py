@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox as mb
 from datetime import datetime, date
 from utils.formatacao import *
 from utils.meses import meses_por_indice
@@ -116,6 +117,8 @@ def adicionar_evento():
                             break
                     if not possui:
                         eventos[ano_int][mes_str].append(novo_evento)
+                    else:
+                        mb.showwarning(title='Erro ao adicionar', message='Não adicionado!\nO evento já existe!')
                 else:
                     eventos[ano_int].update({mes_str: [novo_evento]})
             else:
@@ -126,6 +129,8 @@ def adicionar_evento():
             data_inicial = f'{dia_inicial.get().zfill(2)}/{str(meses_por_indice[mes_str]).zfill(2)}/{ano_int}'
             data_final = f'{dia_final.get().zfill(2)}/{str(meses_por_indice[mes_str]).zfill(2)}/{ano_int}'
             v.criar_evento(data_inicial, data_final, info.get(), funciona.get())
+        else:
+            mb.showwarning(title='Erro ao adicionar', message="Não adicionado!\nDescrição Vazia!")
 
     def send_data_2():
         nonlocal Adicionar_Evento
