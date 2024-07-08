@@ -1,0 +1,51 @@
+def format(data:tuple | int) -> str:
+    if type(data) is int:
+        return f'{data}'
+    if len(data) == 1:
+        return f'{data[0]}'
+    if data[1] - data[0] > 1:
+        return f'{data[0]} a {data[1]}'
+    return f'{data[0]} e {data[1]}'
+
+def wrap_text(texto: str, tamanho_minimo = 50, tamanho_maximo = 150):
+    contador = 0
+    for i in range(0, len(texto) - 2):
+        if texto[i] == '\n':
+            contador = 0
+        elif contador > tamanho_maximo and texto[i] == ' ':
+            texto =  texto[:i] + '\n' + texto[i + 1:]
+            contador = 0
+        elif texto[i - 1] == '.' and texto[i] == ' ' and contador > tamanho_minimo:
+            texto =  texto[:i] + '\n' + texto[i + 1:]
+            contador = 0
+        else:
+            contador += 1
+    return texto
+
+meses_por_indice = {
+    'Janeiro': 1,
+    'Fevereiro': 2,
+    'Março': 3,
+    'Abril': 4,
+    'Maio': 5,
+    'Junho': 6,
+    'Julho': 7,
+    'Agosto': 8,
+    'Setembro': 9,
+    'Outubro': 10,
+    'Novembro': 11,
+    'Dezembro': 12,
+
+    1: 'Janeiro',
+    2: 'Fevereiro',
+    3: 'Março',
+    4: 'Abril',
+    5: 'Maio',
+    6: 'Junho',
+    7: 'Julho',
+    8: 'Agosto',
+    9: 'Setembro',
+    10: 'Outubro',
+    11: 'Novembro',
+    12: 'Dezembro'
+}
