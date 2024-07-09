@@ -20,15 +20,20 @@ class ListaEventos:
         """
         Remove um evento por data e descrição do evento.
         """
+
         try:
+            # Pega os eventos de uma determinada data
             eventos_do_dia = self.__eventos[data]
             evento_para_remover = None
+
+            #Separa cada um dos eventos em substrings para pegar a descrição
             for evento in eventos_do_dia:
                 nao_funciona, descricao, dias = evento.split(' - ')
                 if descricao == descricao_evento:
                     evento_para_remover = evento
                     break
-
+            
+            # Verifica se temos um evento para remover
             if evento_para_remover:
                 self.__eventos[data].remove(evento_para_remover)
                 if not self.__eventos[data]:  # Se não houver mais eventos na data, remova a chave
