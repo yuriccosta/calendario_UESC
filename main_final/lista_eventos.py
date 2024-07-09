@@ -20,15 +20,20 @@ class ListaEventos:
         """
         Remove um evento por data e descrição do evento.
         """
+
         try:
+            # Pega os eventos de uma determinada data
             eventos_do_dia = self.__eventos[data]
             evento_para_remover = None
+
+            #Separa cada um dos eventos em substrings para pegar a descrição
             for evento in eventos_do_dia:
                 nao_funciona, descricao, dias = evento.split(' - ')
                 if descricao == descricao_evento:
                     evento_para_remover = evento
                     break
-
+            
+            # Verifica se temos um evento para remover
             if evento_para_remover:
                 self.__eventos[data].remove(evento_para_remover)
                 if not self.__eventos[data]:  # Se não houver mais eventos na data, remova a chave
@@ -84,20 +89,21 @@ class ListaEventos:
         _, _, dia = str(data + timedelta(dias)).split('-')
         return dia
 
-
+    #Método criar evento
     def criar_evento(self, data_inicial: str, data_final: str, evento: str, nao_funciona: bool) -> str:
         """
         Cria um novo evento e retorna uma string para ser usado no front.
         """
-        if self.__verifica_data(data_inicial, data_final):
-            data_inicial_formatada = datetime.strptime(data_inicial, ListaEventos.formatacao_data).date()
+        if self.__verifica_data(data_inicial, data_final): #verifica se as datas são válidas e estão em ordem cronológica
+            data_inicial_formatada = datetime.strptime(data_inicial, ListaEventos.formatacao_data).date() 
             data_final_formatada = datetime.strptime(data_final, ListaEventos.formatacao_data).date()
-            dias = data_final_formatada - data_inicial_formatada
+            dias = data_final_formatada - data_inicial_formatada #calcula o tempo de duração do evento
 
-            nao_funciona_evento = 1 if nao_funciona else 0
+            nao_funciona_evento = 1 if nao_funciona else 0 
 
-            # Verifica se o evento ja esta cadastrado com maiscula ou nao
-            aux = f'{nao_funciona_evento} - {evento} - {dias.days}'.lower()
+            
+            aux = f'{nao_funciona_evento} - {evento} - {dias.days}'.lower() #evento formatado em minúsculas 
+            # Verifica se o evento ja esta cadastrado com maiúscula ou nao
             for auxevento in self.__eventos[data_inicial]:
                 if aux == auxevento.lower():
                     return 'Evento já registrado'
@@ -113,8 +119,8 @@ class ListaEventos:
         """
         Verifica se a data é do dia ou futura, caso contrário retorna Falso.
         """
-        try:
-            data_inicial = datetime.strptime(data_str1, ListaEventos.formatacao_data).date()
+        try: #tratamento de exceção 
+            data_inicial = datetime.strptime(data_str1, ListaEventos.formatacao_data).date() #converte e formata para uma data real
             data_final = datetime.strptime(data_str2, ListaEventos.formatacao_data).date()
             data_atual = datetime.now().date()
             return data_inicial >= data_atual <= data_final
