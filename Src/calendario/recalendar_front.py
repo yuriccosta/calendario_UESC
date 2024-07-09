@@ -112,7 +112,7 @@ def adicionar_evento():
                 if (eventos[ano_int]).get(mes_str) is not None:
                     possui = False
                     for evento in eventos[ano_int][mes_str]:
-                        possui = (novo_evento[0] == evento[0] and novo_evento[1] == evento[1] and novo_evento[-1].lower() == evento[-1].lower())
+                        possui = (novo_evento[0] == evento[0] and novo_evento[-1].lower() == evento[-1].lower())
                         if possui:
                             break
                     if not possui:
